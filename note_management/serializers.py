@@ -5,7 +5,7 @@ from rest_framework import serializers
 class SummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Summary
-        fields = ['content']
+        fields = ['content', 'created_at']
 
 
 class NoteSerializer(serializers.ModelSerializer):
