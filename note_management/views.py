@@ -6,9 +6,12 @@ from note_management.serializers import NoteSerializer
 from note_management.models import Note
 from .permissions import IsNoteOwner
 from .utils.summarizer.summarizer_util import summarize
+from rest_framework.filters import SearchFilter
 
 class NotesViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['title']
     
     def get_permissions(self):
         if self.action in ['update', 'partial_update', 'destroy']:
@@ -28,7 +31,8 @@ class NotesViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['GET'])
     def public(self, request):
         notes = Note.objects.filter(is_public=True)
-        serializer = NoteSerializer(notes, many=True)
+        filtered_notes = self.filter_queryset(notes)
+        serializer = NoteSerializer(filtered_notes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=True, methods=['GET'], url_path='summary')
