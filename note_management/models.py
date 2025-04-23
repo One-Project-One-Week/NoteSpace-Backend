@@ -3,7 +3,7 @@ from core.models import User
 from uuid import uuid4
 
 # Create your models here.
-class Notes(models.Model):
+class Note(models.Model):
       
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     title = models.CharField(max_length=200)
@@ -21,8 +21,9 @@ class Notes(models.Model):
     
 class Summary(models.Model):
     
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     note = models.OneToOneField(
-        Notes,
+        Note,
         on_delete=models.CASCADE,
     )
     content = models.TextField()

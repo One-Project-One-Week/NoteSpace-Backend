@@ -1,4 +1,4 @@
-from note_management.models import Summary, Notes
+from note_management.models import Summary, Note
 from core.serializers import UserSerializer
 from rest_framework import serializers
 
@@ -13,7 +13,7 @@ class NoteSerializer(serializers.ModelSerializer):
     Summary = SummarySerializer(read_only=True)
     
     class Meta:
-        model = Notes
+        model = Note
         fields = ['id', 'title', 'content', 'is_public', 'created_at', 'updated_at', 'user', 'summary']
 
 
