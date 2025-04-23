@@ -155,3 +155,5 @@ DJOSER = {
     },
     'TOKEN_MODEL': None,
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
