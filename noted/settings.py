@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     
     # Apps
     'core',
+    'note_management',
 ]
 
 MIDDLEWARE = [
