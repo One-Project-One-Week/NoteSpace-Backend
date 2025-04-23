@@ -1,6 +1,7 @@
 from note_management.models import Summary, Note
 from core.serializers import UserSerializer
 from rest_framework import serializers
+import bleach
 
 class SummarySerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,6 +15,13 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = ['id', 'user', 'summary', 'title', 'content', 'is_public', 'created_at', 'updated_at']
+    
+    def validate_content(self, value):
+        if value:
+            allowed_tags = []
+            allowed_attributes = {}
+            # Sanitize the content using bleach with the custom allowed tags and attributes
+            return bleach.clean(value, tags=allowed_tags, attributes=allowed_attributes)
         
 class UploadFileSerializer(serializers.Serializer):
     file = serializers.FileField()
