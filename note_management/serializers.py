@@ -7,7 +7,6 @@ class SummarySerializer(serializers.ModelSerializer):
         model = Summary
         fields = ['content', 'created_at']
 
-
 class NoteSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     summary = SummarySerializer(read_only=True)
@@ -15,5 +14,16 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = ['id', 'user', 'summary', 'title', 'content', 'is_public', 'created_at', 'updated_at']
+        
+class UploadFileSerializer(serializers.Serializer):
+    file = serializers.FileField()
+    
+    class Meta:
+        fields = ['file']
+        
+    def validate_file(self, value):
+        if not value.name.lower().endswith(('.txt', '.pdf')):
+            raise serializers.ValidationError("File type not supported. Only .txt and .pdf files are supported at the moment.")
+        return value
 
 
