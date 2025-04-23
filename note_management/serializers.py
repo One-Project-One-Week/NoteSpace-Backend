@@ -10,10 +10,10 @@ class SummarySerializer(serializers.ModelSerializer):
 
 class NoteSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    Summary = SummarySerializer(read_only=True)
+    summary = SummarySerializer(read_only=True)
     
     class Meta:
         model = Note
-        fields = ['id', 'title', 'content', 'is_public', 'created_at', 'updated_at', 'user', 'summary']
+        fields = ['id', 'user', 'summary', 'title', 'content', 'is_public', 'created_at', 'updated_at']
 
 
