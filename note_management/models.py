@@ -6,8 +6,8 @@ from uuid import uuid4
 class Note(models.Model):
       
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    title = models.CharField(max_length=200)
-    content = models.TextField()
+    title = models.CharField(max_length=200, default="Untitled")
+    content = models.TextField(null=True, blank=True)
     is_public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
