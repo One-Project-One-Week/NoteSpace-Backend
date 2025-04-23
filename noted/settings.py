@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     
     # Apps
     'core',
-    'note_management',
+    'note_management'
 ]
 
 MIDDLEWARE = [
@@ -133,6 +133,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'core.User'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -141,14 +143,17 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
-   'ACCESS_TOKEN_LIFETIME': timedelta(days=1)
+   'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+   'REFRESH_TOKEN_LIFETIME': timedelta(days=7)
 }
 
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'core.serializers.UserCreateSerializer',
         'current_user': 'core.serializers.UserSerializer',
+        'user': 'core.serializers.UserSerializer',
     },
+    'TOKEN_MODEL': None,
 }
 
-AUTH_USER_MODEL = 'core.User'
+CORS_ALLOW_ALL_ORIGINS = True

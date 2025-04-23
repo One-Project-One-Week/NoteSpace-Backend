@@ -10,3 +10,4 @@ class User(AbstractUser):
         if self.email:
             self.email = self.email.lower()
         super().save(*args, **kwargs)
+        
