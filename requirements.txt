@@ -12,6 +12,7 @@ django-cors-headers==4.7.0
 djangorestframework==3.16.0
 djangorestframework_simplejwt==5.5.0
 djoser==2.3.1
+drf-nested-routers==0.94.1
 groq==0.22.0
 h11==0.14.0
 httpcore==1.0.8

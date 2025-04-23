@@ -27,6 +27,7 @@ class Summary(models.Model):
         on_delete=models.CASCADE,
     )
     content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Summary for {self.note.title}"
