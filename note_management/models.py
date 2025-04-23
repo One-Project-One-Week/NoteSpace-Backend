@@ -15,7 +15,7 @@ class Note(models.Model):
         User, 
         on_delete=models.CASCADE, 
         related_name='notes')
-    
+        
     def __str__(self):
         return f"{self.title} written by {self.user.username}"
     

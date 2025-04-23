@@ -1,6 +1,7 @@
 annotated-types==0.7.0
 anyio==4.9.0
 asgiref==3.8.1
+bleach==6.2.0
 certifi==2025.1.31
 cffi==1.17.1
 charset-normalizer==3.4.1
@@ -55,5 +56,6 @@ tqdm==4.67.1
 typing-inspection==0.4.0
 typing_extensions==4.13.2
 urllib3==2.4.0
+webencodings==0.5.1
 xxhash==3.5.0
 zstandard==0.23.0
