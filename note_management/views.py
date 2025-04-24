@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from rest_framework.validators import ValidationError
 from note_management.serializers import NoteSerializer, UploadFileSerializer, SummarySerializer
-from note_management.models import Note
+from note_management.models import Note, Summary
 from .permissions import IsNoteOwner
 from .utils.summarizer.summarizer_util import summarize
 from .utils.generator.notes_generator import generate_notes
@@ -49,13 +49,20 @@ class NotesViewSet(viewsets.ModelViewSet):
         if not summary:
             return Response({"error": "Unable to generate summary."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        #Create a new summary object or Update the existing one
-        serializer = SummarySerializer(data={"content": summary})
+        # Check if summary exists for this note
+        try:
+            existing_summary = note.summary
+            # Update existing summary
+            serializer = SummarySerializer(existing_summary, data={"content": summary}, partial=True)
+        except Summary.DoesNotExist:
+            # Create new summary
+            serializer = SummarySerializer(data={"content": summary})
+        
         if not serializer.is_valid():
             return Response({"error": serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
         serializer.save(note=note)
         
-        #Call the function to generate a map based on this summary
         return Response(
             {
                 "summary": summary

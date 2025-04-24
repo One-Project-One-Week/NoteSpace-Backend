@@ -25,6 +25,7 @@ class Summary(models.Model):
     note = models.OneToOneField(
         Note,
         on_delete=models.CASCADE,
+        related_name="summary"
     )
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
