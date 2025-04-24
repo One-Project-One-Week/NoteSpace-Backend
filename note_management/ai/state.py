@@ -6,4 +6,5 @@ class State(TypedDict):
     message: str
     chat_history: list
     response: str
-    graph_data: list
+    graph: str
+    summary: str

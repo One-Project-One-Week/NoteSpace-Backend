@@ -6,7 +6,7 @@ import bleach
 class SummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Summary
-        fields = ['content', 'note', 'created_at']
+        fields = ['content', 'graph', 'note', 'created_at']
         read_only_fields = ['note', 'created_at']
 
 class NoteSerializer(serializers.ModelSerializer):
