@@ -6,7 +6,8 @@ import bleach
 class SummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Summary
-        fields = ['content', 'created_at']
+        fields = ['content', 'note', 'created_at']
+        read_only_fields = ['note', 'created_at']
 
 class NoteSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -33,5 +34,3 @@ class UploadFileSerializer(serializers.Serializer):
         if not value.name.lower().endswith(('.txt', '.pdf')):
             raise serializers.ValidationError("File type not supported. Only .txt and .pdf files are supported at the moment.")
         return value
-
-

@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from rest_framework.validators import ValidationError
-from note_management.serializers import NoteSerializer, UploadFileSerializer
+from note_management.serializers import NoteSerializer, UploadFileSerializer, SummarySerializer
 from note_management.models import Note
 from .permissions import IsNoteOwner
 from .utils.summarizer.summarizer_util import summarize
@@ -42,12 +42,19 @@ class NotesViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['GET'], url_path='summary')
     def summarise(self, request, pk=None):
         note = get_object_or_404(Note, pk=pk)
+        
         # Summarize
         note_content = note.content if note.content else ""
         summary = summarize(note_content).strip()
         if not summary:
             return Response({"error": "Unable to generate summary."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
         #Create a new summary object or Update the existing one
+        serializer = SummarySerializer(data={"content": summary})
+        if not serializer.is_valid():
+            return Response({"error": serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        serializer.save(note=note)
+        
         #Call the function to generate a map based on this summary
         return Response(
             {
