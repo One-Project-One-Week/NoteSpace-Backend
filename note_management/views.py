@@ -7,10 +7,11 @@ from rest_framework.validators import ValidationError
 from note_management.serializers import NoteSerializer, UploadFileSerializer, SummarySerializer
 from note_management.models import Note, Summary
 from .permissions import IsNoteOwner
-from .utils.summarizer.summarizer_util import summarize
+from .utils.summarizer.summarizer_util import get_summary_and_graph
 from .utils.generator.notes_generator import generate_notes
 from .utils.processor.text_extractor import extract_texts_from_files
 from .utils.processor.llm_input_preprocessor import tokenize_and_split_text
+import time
 
 class NotesViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
@@ -45,27 +46,24 @@ class NotesViewSet(viewsets.ModelViewSet):
         
         # Summarize
         note_content = note.content if note.content else ""
-        summary = summarize(note_content)
-        if not summary:
-            return Response({"error": "Unable to generate summary."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        response = get_summary_and_graph(note_content)
+        if not response:
+            return Response({"error": "Unable to generate summary and graph."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        # Check if summary exists for this note
-        try:
-            existing_summary = note.summary
-            # Update existing summary
-            serializer = SummarySerializer(existing_summary, data={"content": summary}, partial=True)
-        except Summary.DoesNotExist:
-            # Create new summary
-            serializer = SummarySerializer(data={"content": summary})
-        
-        if not serializer.is_valid():
-            return Response({"error": serializer.errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        serializer.save(note=note)
+        summary, created = Summary.objects.update_or_create(
+            note=note, 
+            defaults={
+                "content": response['summary'],
+                "graph": response['graph']
+            }
+        )
+
+        # Serialize the resulting summary object
+        serializer = SummarySerializer(summary)
         
         return Response(
             {
-                "summary": summary
+                "summary": serializer.data
             }
         )
         
@@ -85,8 +83,12 @@ class NotesViewSet(viewsets.ModelViewSet):
                 
             content_chunks = tokenize_and_split_text(extracted_content)
             
-            #generate notes for each chunk
-            notes = [generate_notes(model="qwen/qwen-2.5-7b-instruct:free", content=chunk) for chunk in content_chunks]
+            #generate notes for each chunk with a delay between requests
+            notes = []
+            for chunk in content_chunks:
+                note = generate_notes(model="qwen/qwen-2.5-7b-instruct:free", content=chunk)
+                notes.append(note)
+                time.sleep(5)  # Add a 1-second delay between requests
             
             #combine notes into one by a new line
             note_data = {
