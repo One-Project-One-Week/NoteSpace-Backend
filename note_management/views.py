@@ -4,8 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from rest_framework.validators import ValidationError
-from note_management.serializers import NoteSerializer, UploadFileSerializer, SummarySerializer
-from note_management.models import Note, Summary
+from note_management.serializers import NoteSerializer, UploadFileSerializer, SummarySerializer, BookmarkSerializer
+from note_management.models import Note, Summary, Bookmark
 from .permissions import IsNoteOwner
 from .utils.summarizer.summarizer_util import summarize
 from .utils.generator.notes_generator import generate_notes
@@ -115,3 +115,7 @@ class NotesViewSet(viewsets.ModelViewSet):
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+            
+class BookmarkViewSet(viewsets.ModelViewSet):
+    queryset = Bookmark.objects.all()
+    serializer_class = BookmarkSerializer

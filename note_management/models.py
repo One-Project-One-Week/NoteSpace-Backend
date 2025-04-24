@@ -32,3 +32,13 @@ class Summary(models.Model):
 
     def __str__(self):
         return f"Summary for {self.note.title}"
+    
+class Bookmark(models.Model):
+    
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    note = models.ForeignKey(Note, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.user.username} bookmarked {self.note.title}"

@@ -1,4 +1,4 @@
-from note_management.models import Summary, Note
+from note_management.models import Summary, Note, Bookmark
 from core.serializers import UserSerializer
 from rest_framework import serializers
 import bleach
@@ -34,3 +34,12 @@ class UploadFileSerializer(serializers.Serializer):
         if not value.name.lower().endswith(('.txt', '.pdf')):
             raise serializers.ValidationError("File type not supported. Only .txt and .pdf files are supported at the moment.")
         return value
+    
+    
+class BookmarkSerializer(serializers.Serializer):
+    user = UserSerializer(read_only=True)
+    note = NoteSerializer(read_only=True)
+    
+    class Meta:
+        model = Bookmark
+        fields = ['id', 'note', 'user', 'created_at']
