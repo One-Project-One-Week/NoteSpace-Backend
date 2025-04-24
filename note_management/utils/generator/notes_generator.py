@@ -1,43 +1,54 @@
-from llm.openrouter_client import openrouter_client
+from llm.groq_client import groq_client
 
-def generate_notes(model: str = "mistralai/mistral-7b-instruct:free", content: str="") -> str:
+def generate_notes(model: str = "llama-3.3-70b-versatile", content: str="") -> str:
     
-    response = openrouter_client.chat.completions.create(
-        model=model, 
-        messages=[
-            {
-                "role": "system",
-                "content": """
-                    You are a note-taking assistant designed to help students summarize text into study notes.
+    response = groq_client.chat.completions.create(
+    model=model, 
+    messages=[
+        {
+            "role": "system",
+            "content": """
+                You are an AI assistant designed to convert raw educational text (extracted from a PDF) into well-structured study notes. Your goal is to organize the content clearly using Quill.js-compatible HTML tags.
 
-                    Your task is to convert a given input into concise, clear notes, as a high school student might write. Follow these guidelines:
+                Use these tags appropriately:
 
-                    - Only output the notes—do not include any explanations, interpretations, or commentary.
-                    - Format the notes using **HTML tags** supported by **Quill JS** (e.g., `<h1>`, `<p>`, `<strong>`, `<blockquote>`, `<ol>`, `<li>`).
-                    - Use short, direct sentences or bullet points instead of long paragraphs.
-                    - Do **not** include the title of the original content in the notes.
-                    - Avoid any markup characters like `*` or `-`; use proper HTML structure.
-                    - Only include important concise points and details.
-                    - Keep it as concise as possible.
-                    - Only reply with the formatted notes. Do not include anything else.
+                <h1> for main topic titles
 
-                    Example format:
+                <h2> for subtopics
 
-                    <h1>Short Girls Are Better</h1>
-                    <p><br></p>
-                    <blockquote><strong>Why?</strong></blockquote>
-                    <ol><li data-list="bullet">They're short</li><li data-list="bullet">They're not tall</li></ol>
-                    <p><br></p>
-                    <blockquote>How to choose?</blockquote>
-                    <ol><li data-list="ordered">Less than <strong>5'2"</strong></li></ol>
-                    <p><br></p>
-                    """
-            },
-            {
-                "role": "user",
-                "content": content
-            }
-        ]
-    )
+                <p> for general explanations and paragraphs
+
+                <ul> and <li> for bullet points
+
+                <strong> to bold key terms or definitions
+
+                <em> to emphasize important phrases
+
+                <blockquote> for quotes or referenced content
+
+                <br> to add line spacing between blocks of content when it improves readability (like between headings and lists or after paragraphs)
+
+                Rules:
+
+                Return only valid HTML that works in Quill.js.
+
+                Use <br> tags for line spacing, but don’t spam them—just enough to give breathing room between logical sections.
+
+                Don’t add extra commentary or text outside the HTML.
+
+                Focus on summarizing and organizing the key concepts clearly.
+
+                Format the output as clean student notes—ready for copy-pasting into a Quill.js editor.
+            """
+
+        },
+        {
+            "role": "user",
+            "content": content
+        }
+    ]
+)
+
+
     
     return response.choices[0].message.content
