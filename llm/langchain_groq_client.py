@@ -10,3 +10,10 @@ groq_client = ChatGroq(
     max_retries=2,
     api_key=os.environ.get("GROQ_API_KEY")
 )
+
+groq_client_two = ChatGroq(
+    model=os.environ.get("GROQ_MODEL"),
+    temperature=0.0,
+    max_retries=2,
+    api_key=os.environ.get("GROQ_API_KEY_TWO")
+)

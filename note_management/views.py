@@ -83,12 +83,8 @@ class NotesViewSet(viewsets.ModelViewSet):
                 
             content_chunks = tokenize_and_split_text(extracted_content)
             
-            #generate notes for each chunk with a delay between requests
-            notes = []
-            for chunk in content_chunks:
-                note = generate_notes(model="qwen/qwen-2.5-7b-instruct:free", content=chunk)
-                notes.append(note)
-                time.sleep(5)  # Add a 1-second delay between requests
+            #generate notes for each chunk
+            notes = [generate_notes(content=chunk) for chunk in content_chunks]
             
             #combine notes into one by a new line
             note_data = {
