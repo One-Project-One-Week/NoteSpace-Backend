@@ -45,7 +45,7 @@ class NotesViewSet(viewsets.ModelViewSet):
         
         # Summarize
         note_content = note.content if note.content else ""
-        summary = summarize(note_content).strip()
+        summary = summarize(note_content)
         if not summary:
             return Response({"error": "Unable to generate summary."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
@@ -99,7 +99,7 @@ class NotesViewSet(viewsets.ModelViewSet):
             
             serializer.save(user=self.request.user)
             
-            return Response({"response": "Note Generated Successfully"})    
+            return Response({"note": serializer.data["id"]})    
         
         except Exception as err:
             return Response(
