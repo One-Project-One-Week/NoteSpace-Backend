@@ -51,11 +51,15 @@ class NotesViewSet(viewsets.ModelViewSet):
         if not note.is_public:
             return Response({ "detail": "Private notes cannot be bookmarked"})
         
+        if Bookmark.objects.filter(user=request.user, note=note).exists():
+            Bookmark.objects.get(user=request.user, note=note).delete()
+            return Response({ "code": "deleted" })
+        
         Bookmark.objects.create(
             user=request.user,
             note=note
         )
-        return Response({ "message": "Bookmark successfully added!" })   
+        return Response({ "code": "added" })   
     
     @action(detail=True, methods=['GET'], url_path='summary')
     def summarise(self, request, pk=None):
