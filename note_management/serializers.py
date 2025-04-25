@@ -36,10 +36,23 @@ class UploadFileSerializer(serializers.Serializer):
         return value
     
     
-class BookmarkSerializer(serializers.Serializer):
+class BookmarkCreateSerializer(serializers.Serializer):
     user = UserSerializer(read_only=True)
     note = NoteSerializer(read_only=True)
     
     class Meta:
         model = Bookmark
         fields = ['id', 'note', 'user', 'created_at']
+        
+class BookmarkSerializer(serializers.ModelSerializer):
+    note = NoteSerializer(read_only=True)
+
+    class Meta:
+        model = Bookmark
+        fields = ['id', 'note']
+
+    def to_representation(self, instance):
+        note_data = NoteSerializer(instance.note, context=self.context).data
+        note_data['bookmark_id'] = instance.id  # Inject bookmark ID into the note
+        return note_data
+    
