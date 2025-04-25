@@ -4,8 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from rest_framework.validators import ValidationError
-from note_management.serializers import NoteSerializer, UploadFileSerializer, SummarySerializer, ChatbotSerializer
-from note_management.models import Note, Summary
+from note_management.serializers import *
+from note_management.models import Note, Summary, Bookmark
 from .permissions import IsNoteOwner
 from .utils.summarizer.summarizer_util import get_summary_and_graph
 from .utils.generator.notes_generator import generate_notes
@@ -22,6 +22,9 @@ class NotesViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['update', 'partial_update', 'destroy']:
             return [permissions.IsAuthenticated(), IsNoteOwner()]
+        
+        if self.action == "public":
+            return [permissions.AllowAny()]
         
         return [permissions.IsAuthenticated()]
     
@@ -40,6 +43,19 @@ class NotesViewSet(viewsets.ModelViewSet):
         filtered_notes = self.filter_queryset(notes)
         serializer = NoteSerializer(filtered_notes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=["POST"])
+    def bookmark(self, request, pk=None):
+        note = get_object_or_404(Note, pk=pk)
+        
+        if not note.is_public:
+            return Response({ "detail": "Private notes cannot be bookmarked"})
+        
+        Bookmark.objects.create(
+            user=request.user,
+            note=note
+        )
+        return Response({ "message": "Bookmark successfully added!" })   
     
     @action(detail=True, methods=['GET'], url_path='summary')
     def summarise(self, request, pk=None):
@@ -134,3 +150,14 @@ class NotesViewSet(viewsets.ModelViewSet):
                 
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BookmarkViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    http_method_names = ['get', 'delete']
+    serializer_class = BookmarkSerializer
+    
+    def get_queryset(self):
+        if self.action == "list":
+            return Bookmark.objects.filter(user=self.request.user)
+        
+        return Bookmark.objects.all()
