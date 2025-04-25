@@ -34,3 +34,7 @@ class UploadFileSerializer(serializers.Serializer):
         if not value.name.lower().endswith(('.txt', '.pdf')):
             raise serializers.ValidationError("File type not supported. Only .txt and .pdf files are supported at the moment.")
         return value
+    
+class ChatbotSerializer(serializers.Serializer):
+    chat_history = serializers.ListField(required=False)
+    message = serializers.CharField()
