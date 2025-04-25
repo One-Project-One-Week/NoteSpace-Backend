@@ -144,7 +144,7 @@ class NotesViewSet(viewsets.ModelViewSet):
 
             try:
                 chat_response = use_chatbot(username=username, message=message, chat_history=chat_history, notes=sanitized_note_content)
-                return Response({"response": chat_response}, status=status.HTTP_200_OK)
+                return Response({"prompt": message, "response": chat_response}, status=status.HTTP_200_OK)
             except Exception as err:
                 return Response({"error": str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 
