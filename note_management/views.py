@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, throttle_classes
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from rest_framework.validators import ValidationError
@@ -12,12 +12,22 @@ from .utils.generator.notes_generator import generate_notes
 from .utils.processor.text_extractor import extract_texts_from_files
 from .utils.processor.llm_input_preprocessor import tokenize_and_split_text
 from .utils.assistant.chatbot_util import use_chatbot
+from .throttles import *
 import time
 
 class NotesViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
     filter_backends = [SearchFilter]
     search_fields = ['title']
+    
+    def get_throttles(self):
+        if self.action in ['generate_notes']:
+            return [GenerateNotesThrottle()]
+        if self.action in ['chatbot']:
+            return [ChatbotThrottle()]
+        if self.action in ['summarise']:
+            return [GenerateNotesSummaryThrottle()]
+        return []
     
     def get_permissions(self):
         if self.action in ['update', 'partial_update', 'destroy']:
@@ -98,6 +108,12 @@ class NotesViewSet(viewsets.ModelViewSet):
         
         uploaded_file = serializer.validated_data["file"]
         
+        # File Size Control
+        FILE_SIZE_LIMIT = 2 * 1024 * 1024
+        
+        if uploaded_file.size > FILE_SIZE_LIMIT:
+            return Response({"error": "File exceeds 2MB limit"}, status=status.HTTP_400_BAD_REQUEST)
+        
         try:
             
             extracted_content = extract_texts_from_files(uploaded_file)
@@ -116,12 +132,7 @@ class NotesViewSet(viewsets.ModelViewSet):
             serializer = NoteSerializer(data=note_data)
             
             if not serializer.is_valid():
-                return Response(
-                    {
-                        "error": f"Error validating note data: {serializer.errors}"
-                    },
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                raise ValidationError(serializer.errors)
             
             serializer.save(user=self.request.user)
             
@@ -130,7 +141,7 @@ class NotesViewSet(viewsets.ModelViewSet):
         except Exception as err:
             return Response(
                 {
-                    "error": f"Error occured while reading the file: {err}"
+                    "error": f"{err}"
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
