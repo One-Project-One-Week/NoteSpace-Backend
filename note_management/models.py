@@ -28,11 +28,14 @@ class Summary(models.Model):
         related_name="summary"
     )
     content = models.TextField()
+    graph = models.JSONField(default="")
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Summary for {self.note.title}"
     
+<<<<<<< HEAD
 class Bookmark(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
@@ -42,3 +45,6 @@ class Bookmark(models.Model):
     
     def __str__(self):
         return f"{self.user.username} bookmarked {self.note.title}"
+=======
+    
+>>>>>>> 1fea6f17b60f749ef4e634cf7e530d9431ddf3b7
