@@ -11,6 +11,7 @@ from .utils.summarizer.summarizer_util import get_summary_and_graph
 from .utils.generator.notes_generator import generate_notes
 from .utils.processor.text_extractor import extract_texts_from_files
 from .utils.processor.llm_input_preprocessor import tokenize_and_split_text
+from .utils.assistant.chatbot_util import use_chatbot
 import time
 
 class NotesViewSet(viewsets.ModelViewSet):
@@ -130,6 +131,26 @@ class NotesViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
             
+    @action(detail=True, methods=['POST'], url_path="chat", serializer_class=ChatbotSerializer)
+    def chatbot(self, request, pk=None):
+        note = get_object_or_404(Note, pk=pk)
+        serializer = ChatbotSerializer(data=request.data)
+
+        if serializer.is_valid():
+            sanitized_note_content = note.sanitize_html(note.content)
+            username = request.user.username
+            message = serializer.validated_data["message"]
+            chat_history = serializer.validated_data.get("chat_history", [])
+
+            try:
+                chat_response = use_chatbot(username=username, message=message, chat_history=chat_history, notes=sanitized_note_content)
+                return Response({"response": chat_response}, status=status.HTTP_200_OK)
+            except Exception as err:
+                return Response({"error": str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class BookmarkViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'delete']

@@ -2,9 +2,10 @@ from typing import TypedDict, List
 
 class State(TypedDict):
     username: str
-    notes: str
     message: str
-    chat_history: list
+    notes: str
+    summary: str
     response: str
     graph: str
-    summary: str
+    chat_history: list
+    chat_history_summary: str

@@ -1,6 +1,7 @@
 from django.db import models
 from core.models import User
 from uuid import uuid4
+from bs4 import BeautifulSoup
 
 # Create your models here.
 class Note(models.Model):
@@ -18,6 +19,10 @@ class Note(models.Model):
         
     def __str__(self):
         return f"{self.title} written by {self.user.username}"
+    
+    def sanitize_html(self, html):
+        soup = BeautifulSoup(html, "html.parser")
+        return soup.get_text()
     
 class Summary(models.Model):
     
