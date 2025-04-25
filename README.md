@@ -6,7 +6,7 @@ NoteSpace is an AI-powered note-taking web app that turns your PDFs into clean, 
 
 | Name             | Role                        | GitHub                                      |
 |------------------|-----------------------------|---------------------------------------------|
-| Min Sik Hein     | Project Manager / AI Engineer | [@Direwen](https://github.com/Direwen)        |
+| Min Sik Hein     | Project Manager / Backend AI Developer | [@Direwen](https://github.com/Direwen)        |
 | Htet Aung Lwin   | Frontend Developer          | [@HtetAungLw1n](https://github.com/HtetAungLw1n) |
 | Oak Soe Thein    | Frontend Developer          | [@tom2811](https://github.com/tom2811)         |
 | Khant Thit Oo    | Backend Developer           | [@travthegoat](https://github.com/travthegoat) |
