@@ -109,6 +109,7 @@ Your task is to:
     * Center the layout horizontally (around x=500)
 - Provide only the JSON structure without any additional commentary or interpretation or markups
 - DO NOT include any markdown formatting like ```json or ``` in the output
+- Generate nodes and suitable edges (connections) as many as possible without being duplicative
 - The output should be a pure JSON string that can be parsed directly
 
 ### Node Format:
