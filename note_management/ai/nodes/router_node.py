@@ -4,13 +4,13 @@ from llm.langchain_openrouter_client import openrouter_client
 from llm.langchain_groq_client import groq_client
 
 def router(state : State):
-    res= groq_client.invoke(
-        prompt_template.format(input=state["message"])
-    )
+    
+    if state["message"] == "##App_Summarizer##":
+        node_destination = "summarizer"
+    else:
+        node_destination = "chatbot"
     
     #For Debugging
-    print(f"Router Destination: {res.content}\n\n")
-    
-    node_destination = res.content.strip()
+    print(f"Router Destination: {node_destination}\n\n")
     
     return {"next": node_destination if node_destination in ["chatbot", "summarizer"] else "chatbot"}

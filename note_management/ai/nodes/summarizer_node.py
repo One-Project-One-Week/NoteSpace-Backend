@@ -6,5 +6,5 @@ from llm.langchain_openrouter_client import openrouter_client
 def summarizer(state : State):
     
     return {
-        "summary": groq_client_two.invoke(prompt_template.format(notes=state["notes"]))
+        "summary": openrouter_client.invoke(prompt_template.format(notes=state["notes"]))
     }
