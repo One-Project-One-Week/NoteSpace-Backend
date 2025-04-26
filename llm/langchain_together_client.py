@@ -2,6 +2,7 @@ from langchain_together import ChatTogether
 import os
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 together_client = ChatTogether(

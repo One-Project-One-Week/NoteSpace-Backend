@@ -1,4 +1,32 @@
 from langchain.prompts import PromptTemplate, FewShotPromptTemplate
+from langchain.output_parsers import PydanticOutputParser
+from pydantic import BaseModel, Field
+from typing import List, Dict, Any
+import json
+
+# Define the output structure using Pydantic
+class Node(BaseModel):
+    id: str
+    type: str = "CustomNode"
+    data: Dict[str, str]
+    position: Dict[str, int]
+
+class Edge(BaseModel):
+    id: str
+    source: str
+    target: str
+    type: str = "CustomEdge"
+    data: Dict[str, str]
+
+class GraphOutput(BaseModel):
+    nodes: List[Node]
+    edges: List[Edge]
+
+# Create the output parser
+parser = PydanticOutputParser(pydantic_object=GraphOutput)
+
+# Get format instructions and escape curly braces
+format_instructions = parser.get_format_instructions().replace("{", "{{").replace("}", "}}")
 
 # # Example dataset
 examples = [
@@ -102,15 +130,17 @@ Your task is to:
     2. An "edges" array representing connections between them.
 - Maintain logical flow with appropriate node connections.
 - Position nodes with a vertical emphasis (2:1 ratio):
-    * Use x-coordinates between 300-700 (400px horizontal range)
-    * Use y-coordinates between 100-900 (800px vertical range)
-    * Space nodes horizontally with at least 100px between them
-    * Space nodes vertically with at least 150px between them
+    * Use x-coordinates between 500-1000
+    * Use y-coordinates between 300-1000
+    * Space nodes horizontally with at least 300px between them
+    * Space nodes vertically with at least 200px between them
     * Center the layout horizontally (around x=500)
 - Provide only the JSON structure without any additional commentary or interpretation or markups
 - DO NOT include any markdown formatting like ```json or ``` in the output
-- Generate nodes and suitable edges (connections) as many as possible without being duplicative
+- Generate nodes and suitable edges (connections) for a suitable amount (not too few or not too many) without being duplicative while avoiding overlapping positions between nodes
 - The output should be a pure JSON string that can be parsed directly
+
+{format_instructions}
 
 ### Node Format:
 Each node must include:
@@ -141,7 +171,20 @@ Here are some examples:
 prompt_template = FewShotPromptTemplate(
     examples=examples,
     example_prompt=example_prompt,
-    prefix=system_prompt,
+    prefix=system_prompt.format(format_instructions=format_instructions),
     suffix="Notes: {notes}\nGraph:",
     input_variables=["notes"]
 )
+
+def validate_graph_output(output: str) -> Dict[str, Any]:
+    """Validate and parse the graph output."""
+    try:
+        # First try to parse as JSON
+        json_data = json.loads(output)
+        # Then validate against our Pydantic model
+        validated_data = GraphOutput.model_validate_json(json_data)
+        return validated_data.model_dump()
+    except json.JSONDecodeError:
+        raise ValueError("Invalid JSON format")
+    except Exception as e:
+        raise ValueError(f"Invalid graph structure: {str(e)}")
