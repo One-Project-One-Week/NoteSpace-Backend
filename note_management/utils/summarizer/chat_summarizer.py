@@ -27,5 +27,7 @@ def summarize_chat(model: str = os.environ.get("OPENROUTER_MODEL"), content : li
             }
         ]
     )
+    
+    print(f"Chat Summariser >>> {res}")
 
-    return res.choices[0].message.content
+    return res.choices[0].message.content if res.choices[0].message.content else "No Chat History"

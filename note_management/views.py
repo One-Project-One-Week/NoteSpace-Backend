@@ -147,12 +147,11 @@ class NotesViewSet(viewsets.ModelViewSet):
             return Response({"note": serializer.data["id"]})    
         
         except Exception as err:
-            return Response(
-                {
-                    "error": f"{err}"
-                },
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response({
+                "error": str(err),
+                "type": type(err).__name__,
+                "trace": traceback.format_exc()
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
     @action(detail=True, methods=['POST'], url_path="chat", serializer_class=ChatbotSerializer)
     def chatbot(self, request, pk=None):
@@ -182,12 +181,11 @@ class NotesViewSet(viewsets.ModelViewSet):
                 )
                 
             except Exception as err:
-                return Response(
-                    {
-                        "error": f"{err}"
-                    },
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )                
+                return Response({
+                    "error": str(err),
+                    "type": type(err).__name__,
+                    "trace": traceback.format_exc()
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)           
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
