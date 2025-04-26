@@ -1,11 +1,12 @@
 from llm.openrouter_client import openrouter_client
+from llm.together_client import together_client
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
 def summarize_chat(model: str = os.environ.get("OPENROUTER_MODEL"), content : list = [] ) -> str:
-    res = openrouter_client.chat.completions.create(
+    res = together_client.chat.completions.create(
         model=model,
         messages=[
             {
@@ -29,5 +30,8 @@ def summarize_chat(model: str = os.environ.get("OPENROUTER_MODEL"), content : li
     )
     
     print(f"Chat Summariser >>> {res}")
-
-    return res.choices[0].message.content if res.choices[0].message.content else "No Chat History"
+    
+    try:
+        return res.choices[0].message.content
+    except:
+        return "No Chat History"

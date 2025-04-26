@@ -6,7 +6,7 @@ from llm.langchain_gemini_client import genai_client
 
 def chatbot(state : State):
     
-    response = genai_client.invoke(prompt_template.format(
+    response = together_client.invoke(prompt_template.format(
             username=state['username'],
             chat_history_summary=state["chat_history_summary"],
             notes=state["notes"],

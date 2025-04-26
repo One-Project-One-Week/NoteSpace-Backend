@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from typing import List, Dict, Any
 import json
 
-# Define the output structure using Pydantic
+# Defining output structure with Pydantic
 class Node(BaseModel):
     id: str
     type: str = "CustomNode"
@@ -28,7 +28,6 @@ parser = PydanticOutputParser(pydantic_object=GraphOutput)
 # Get format instructions and escape curly braces
 format_instructions = parser.get_format_instructions().replace("{", "{{").replace("}", "}}")
 
-# # Example dataset
 examples = [
     {
         "notes": """
@@ -114,12 +113,10 @@ examples = [
     }
 ]
 
-# # Template for individual examples
 example_prompt = PromptTemplate.from_template(
     template="Notes: {notes}\nGraph: {graph}"
 )
 
-# # System prompt (instructions for the AI)
 system_prompt = """
 You are a React Flow graph generator AI specialized in transforming user note summaries into node-based visualizations.
 
@@ -135,10 +132,13 @@ Your task is to:
     * Space nodes horizontally with at least 300px between them
     * Space nodes vertically with at least 200px between them
     * Center the layout horizontally (around x=500)
+    * Start the first node at y=100 and increment by at least 200px for each subsequent node
+    * For nodes that need to be side by side, use x-coordinates that are at least 300px apart
 - Provide only the JSON structure without any additional commentary or interpretation or markups
 - DO NOT include any markdown formatting like ```json or ``` in the output
 - Generate nodes and suitable edges (connections) for a suitable amount (not too few or not too many) without being duplicative while avoiding overlapping positions between nodes
 - The output should be a pure JSON string that can be parsed directly
+- IMPORTANT: Limit the total number of nodes to a maximum of 10 nodes to ensure complete response generation
 
 {format_instructions}
 

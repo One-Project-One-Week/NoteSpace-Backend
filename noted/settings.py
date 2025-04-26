@@ -142,7 +142,7 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'generate_notes': '1/hour',
         'generate_notes_summary': '3/hour',
-        'chatbot': '6/minute',
+        'chatbot': '5/minute',
     }
 }
 

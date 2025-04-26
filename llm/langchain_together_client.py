@@ -7,7 +7,7 @@ load_dotenv()
 
 together_client = ChatTogether(
     model=os.environ.get("TOGETHER_MODEL"),
-    temperature=0.4,
+    temperature=0.0,
     max_retries=2,
     api_key=os.environ.get("TOGETHER_API_KEY")
 )
