@@ -13,7 +13,7 @@ from .utils.processor.text_extractor import extract_texts_from_files
 from .utils.processor.llm_input_preprocessor import tokenize_and_split_text
 from .utils.assistant.chatbot_util import use_chatbot
 from .throttles import *
-import time
+import traceback
 
 class NotesViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
@@ -75,28 +75,36 @@ class NotesViewSet(viewsets.ModelViewSet):
     def summarise(self, request, pk=None):
         note = get_object_or_404(Note, pk=pk)
         
-        # Summarize
-        note_content = note.content if note.content else ""
-        response = get_summary_and_graph(note_content)
-        if not response:
-            return Response({"error": "Unable to generate summary and graph."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        summary, created = Summary.objects.update_or_create(
-            note=note, 
-            defaults={
-                "content": response['summary'],
-                "graph": response['graph']
-            }
-        )
+        # Sanitize note content
+        note_content = note.sanitize_html(note.content) if note.content else ""
 
-        # Serialize the resulting summary object
-        serializer = SummarySerializer(summary)
-        
-        return Response(
-            {
-                "summary": serializer.data
-            }
-        )
+        try:
+            # Summarize and Get Graph data
+            response = get_summary_and_graph(note_content)
+            
+            summary, created = Summary.objects.update_or_create(
+                note=note, 
+                defaults={
+                    "content": response['summary'],
+                    "graph": response['graph']
+                }
+            )
+
+            # Serialize the resulting summary object
+            serializer = SummarySerializer(summary)
+            
+            return Response(
+                {
+                    "summary": serializer.data
+                }
+            )
+            
+        except Exception as err:
+            return Response({
+                "error": str(err),
+                "type": type(err).__name__,
+                "trace": traceback.format_exc()
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     @action(detail=False, methods=['POST'], url_path='upload', serializer_class=UploadFileSerializer)
     def generate_notes(self, request):
@@ -158,11 +166,28 @@ class NotesViewSet(viewsets.ModelViewSet):
             chat_history = serializer.validated_data.get("chat_history", [])
 
             try:
-                chat_response = use_chatbot(username=username, message=message, chat_history=chat_history, notes=sanitized_note_content)
-                return Response({"prompt": message, "response": chat_response}, status=status.HTTP_200_OK)
-            except Exception as err:
-                return Response({"error": str(err)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                chat_response = use_chatbot(
+                    username=username, 
+                    message=message, 
+                    chat_history=chat_history, 
+                    notes=sanitized_note_content
+                )
                 
+                return Response(
+                    {
+                        "prompt": message, 
+                        "response": chat_response
+                    }, 
+                    status=status.HTTP_200_OK
+                )
+                
+            except Exception as err:
+                return Response(
+                    {
+                        "error": f"{err}"
+                    },
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )                
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

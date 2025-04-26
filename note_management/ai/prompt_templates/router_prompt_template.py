@@ -2,7 +2,7 @@ from langchain_core.prompts import PromptTemplate, FewShotPromptTemplate
 
 examples = [
     {
-        "input": "##App_Summarizer## Can you summarize my notes from yesterday?",
+        "input": "##App_Summarizer##",
         "output": "summarizer"
     },
     {
@@ -14,7 +14,7 @@ examples = [
         "output": "chatbot"
     },
     {
-        "input": "##App_Summarizer## Give me a summary of my meeting notes",
+        "input": "##App_Summarizer##",
         "output": "summarizer"
     },
     {
@@ -22,7 +22,7 @@ examples = [
         "output": "chatbot"
     },
     {
-        "input": "##App_Summarizer## Summarize my notes from last week",
+        "input": "##App_Summarizer##",
         "output": "summarizer"
     }
 ]
@@ -37,7 +37,7 @@ You are a routing assistant. Analyze the input and decide whether it is:
 If the user asks for a summary of notes and the request message doesn't start with the specific text, ##App_Summarizer##, 
 you should route respond "chatbot".
 
-Respond with only one of the following:
+Respond with only one of the following without any additonal explanation or commentary:
     - "chatbot"
     - "summarizer"
     

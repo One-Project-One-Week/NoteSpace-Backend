@@ -53,6 +53,7 @@ langgraph-checkpoint==2.0.24
 langgraph-prebuilt==0.1.8
 langgraph-sdk==0.1.63
 langsmith==0.3.33
+lxml==5.4.0
 markdown-it-py==3.0.0
 marshmallow==3.26.1
 mdurl==0.1.2

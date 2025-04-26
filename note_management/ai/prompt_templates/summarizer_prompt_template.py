@@ -59,7 +59,6 @@ examples = [
         "summary": """
         Agentic AI is a type of artificial intelligence that can make decisions and act independently, using tools and adapting its behavior based on goals and feedback. LangChain and LangGraph are two tools used to build such systems. LangChain helps create structured sequences of tasks using language models and external tools, while LangGraph adds advanced control by letting developers define workflows as graphs with loops and branches. These tools allow developers to build agents that can search for information, analyze results, and respond intelligently, making AI more useful and dynamic in real-world applications.
 
-        Summarized Main Points:
         - Agentic AI means AI that can plan, decide, and act by itself based on goals and context.
         - LangChain is a Python tool that connects language models with tools like APIs, databases, and more.
         - LangChain helps create chains of tasks for agents to follow step-by-step.
@@ -98,15 +97,14 @@ examples = [
         "summary": """
         Docker containers are self-contained packages that bundle applications with their dependencies, ensuring consistent operation across different environments. They work like standardized shipping containers for software, making deployment and scaling more efficient than traditional methods.
 
-        Summarized Main Points:
-        - Docker containers package applications with all necessary dependencies
-        - A Dockerfile serves as a blueprint for building container images
-        - Images are static templates, while containers are running instances
-        - Docker Hub provides a platform for sharing container images
-        - Containers offer better resource efficiency than virtual machines
-        - Docker provides isolation between different applications
-        - Common commands include building images, running containers, and managing container lifecycle
-        - Docker simplifies deployment and ensures consistency across development and production
+        - Docker containers package applications with all necessary dependencies\n
+        - A Dockerfile serves as a blueprint for building container images\n
+        - Images are static templates, while containers are running instances\n
+        - Docker Hub provides a platform for sharing container images\n
+        - Containers offer better resource efficiency than virtual machines\n
+        - Docker provides isolation between different applications\n
+        - Common commands include building images, running containers, and managing container lifecycle\n
+        - Docker simplifies deployment and ensures consistency across development and production\n
         """
     },
 ]
