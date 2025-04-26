@@ -6,8 +6,8 @@ import bleach
 class SummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Summary
-        fields = ['content', 'graph', 'note', 'created_at']
-        read_only_fields = ['note', 'created_at']
+        fields = ['content', 'graph', 'note', 'created_at', 'updated_at']
+        read_only_fields = ['note', 'created_at', 'updated_at']
 
 class NoteSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
