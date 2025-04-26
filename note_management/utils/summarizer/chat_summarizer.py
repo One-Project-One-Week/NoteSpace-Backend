@@ -1,7 +1,11 @@
-from llm.together_client import together_client
+from llm.openrouter_client import openrouter_client
+import os
+from dotenv import load_dotenv
 
-def summarize_chat(model: str = "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo", content : str = "") -> str:
-    res = together_client.chat.completions.create(
+load_dotenv()
+
+def summarize_chat(model: str = os.environ.get("OPENROUTER_MODEL"), content : list = [] ) -> str:
+    res = openrouter_client.chat.completions.create(
         model=model,
         messages=[
             {
@@ -12,16 +16,16 @@ def summarize_chat(model: str = "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo", c
                 - Covers the entire conversation in chronological order (from oldest to newest),
                 - Includes as many specific details as possible,
                 - Avoids omitting important facts or decisions made during the conversation.
-                The provided list of messages starts from newest to oldest messages and includes roles and content in each dictionary.
-                Retain the original flow of the dialogue, and ensure your summary reflects the full context accurately.
-                If the provided list is empty, just reply with "No Chat History".
+                The provided list of messages starts from newest to oldest messages.
+                Retain the original flow of the dialogue, and ensure your summary is just a short mini paragraph to describe the convesation.
+                **If the provided list is empty, just reply with "No Chat History".**
                 """
             },
             {
                 "role": "user",
-                "content": content
+                "content": str(content)
             }
         ]
     )
 
-    print(res.choices[0].message.content)
+    return res.choices[0].message.content

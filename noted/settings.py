@@ -139,6 +139,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_THROTTLE_RATES': {
+        'generate_notes': '1/hour',
+        'generate_notes_summary': '3/hour',
+        'chatbot': '5/minute',
+    }
 }
 
 SIMPLE_JWT = {
