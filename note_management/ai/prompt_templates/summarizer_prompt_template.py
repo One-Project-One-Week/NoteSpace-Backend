@@ -59,15 +59,17 @@ examples = [
         "summary": """
         Agentic AI is a type of artificial intelligence that can make decisions and act independently, using tools and adapting its behavior based on goals and feedback. LangChain and LangGraph are two tools used to build such systems. LangChain helps create structured sequences of tasks using language models and external tools, while LangGraph adds advanced control by letting developers define workflows as graphs with loops and branches. These tools allow developers to build agents that can search for information, analyze results, and respond intelligently, making AI more useful and dynamic in real-world applications.
 
-\n- Agentic AI means AI that can plan, decide, and act by itself based on goals and context.
-\n- LangChain is a Python tool that connects language models with tools like APIs, databases, and more.
-\n- LangChain helps create chains of tasks for agents to follow step-by-step.
-\n- LangGraph builds on LangChain by adding a graph system with branches, loops, and decision-making paths.
-\n- LangGraph lets developers design how the AI behaves in different situations with state transitions.
-\n- Example use case: an AI assistant that searches the web, summarizes results, and retries if confidence is low.
-\n- This assistant can be built using LangChain for tool use and LangGraph for workflow control.
-\n- LangGraph is useful for making AI agents smarter and able to adapt or repeat tasks if needed.
-\n- Developers can use LangChain memory to let the agent remember past interactions.
+        Summarized Main Points:
+
+        \n- Agentic AI means AI that can plan, decide, and act by itself based on goals and context.
+        \n- LangChain is a Python tool that connects language models with tools like APIs, databases, and more.
+        \n- LangChain helps create chains of tasks for agents to follow step-by-step.
+        \n- LangGraph builds on LangChain by adding a graph system with branches, loops, and decision-making paths.
+        \n- LangGraph lets developers design how the AI behaves in different situations with state transitions.
+        \n- Example use case: an AI assistant that searches the web, summarizes results, and retries if confidence is low.
+        \n- This assistant can be built using LangChain for tool use and LangGraph for workflow control.
+        \n- LangGraph is useful for making AI agents smarter and able to adapt or repeat tasks if needed.
+        \n- Developers can use LangChain memory to let the agent remember past interactions.
         """
     },
     {
@@ -97,6 +99,7 @@ examples = [
         "summary": """
         Docker containers are self-contained packages that bundle applications with their dependencies, ensuring consistent operation across different environments. They work like standardized shipping containers for software, making deployment and scaling more efficient than traditional methods.
 
+        Summarized Main Points:
         \n- Docker containers package applications with all necessary dependencies
         \n- A Dockerfile serves as a blueprint for building container images
         \n- Images are static templates, while containers are running instances
@@ -125,7 +128,6 @@ Guidelines:
 4. Keep summarized points enough for a 16-year-old to understand
 5. Preserve any critical dates, names, or numbers
 6. Provide only the summary without any additional commentary or interpretation
-7. Use <b> tags to highlight the header and <br> before each bullet point for proper HTML rendering
 
 Here are some examples:
 """
@@ -134,5 +136,7 @@ prompt_template = FewShotPromptTemplate(
     examples=examples,
     example_prompt=example_prompt,
     prefix=system_prompt,
-    suffix="Notes: {notes}\nSummary:",
+    suffix="Notes: {notes}\nSummary:\n- Abstract:\n- Summarized Main Points:",
+    input_variables=["notes"],
+    example_separator="\n\n"
 )

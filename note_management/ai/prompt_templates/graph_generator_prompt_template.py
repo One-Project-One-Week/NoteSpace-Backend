@@ -101,15 +101,12 @@ Your task is to:
     1. A "nodes" array representing individual entities or ideas or steps.
     2. An "edges" array representing connections between them.
 - Maintain logical flow with appropriate node connections.
-- Position nodes in an octopus-like layout:
-    * Main/root node should be at the top center (x=500, y=100)
-    * Child nodes should extend downward in straight lines
-    * Each branch of child nodes should be spaced horizontally to avoid overlap
-    * Use x-coordinates between 200-800 (600px horizontal range)
+- Position nodes with a vertical emphasis (2:1 ratio):
+    * Use x-coordinates between 300-700 (400px horizontal range)
     * Use y-coordinates between 100-900 (800px vertical range)
-    * Space nodes horizontally with at least 200px between different branches
-    * Space nodes vertically with at least 150px between parent and child nodes
-    * Keep child nodes in a straight line below their parent
+    * Space nodes horizontally with at least 100px between them
+    * Space nodes vertically with at least 150px between them
+    * Center the layout horizontally (around x=500)
 - Provide only the JSON structure without any additional commentary or interpretation or markups
 - DO NOT include any markdown formatting like ```json or ``` in the output
 - The output should be a pure JSON string that can be parsed directly
@@ -124,10 +121,9 @@ Each node must include:
     * Use nouns or noun phrases
     * Keep it concise and clear
 - "position": An inner object which includes "x": <number> and "y": <number> where:
-    * x: Position horizontally (200-800)
+    * x: Position horizontally (300-700)
     * y: Position vertically (100-900)
     * Ensure nodes don't overlap by maintaining minimum spacing
-    * Child nodes should be positioned directly below their parent node
 
 ### Edge Format:
 Each edge must include:
