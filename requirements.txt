@@ -39,6 +39,7 @@ httpx==0.28.1
 httpx-sse==0.4.0
 idna==3.10
 jiter==0.9.0
+joblib==1.4.2
 jsonpatch==1.33
 jsonpointer==3.0.0
 langchain==0.3.24
@@ -59,6 +60,7 @@ marshmallow==3.26.1
 mdurl==0.1.2
 multidict==6.4.3
 mypy_extensions==1.1.0
+nltk==3.9.1
 numpy==2.2.5
 oauthlib==3.2.2
 openai==1.75.0

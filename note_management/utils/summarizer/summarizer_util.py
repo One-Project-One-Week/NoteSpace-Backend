@@ -7,7 +7,7 @@ def get_summary_and_graph(content: str):
     })
     
     return {
-        "summary": response['summary'].content,
-        "graph": response['graph'].content
+        "summary": response['summary'],
+        "graph": response['graph']
     }
         

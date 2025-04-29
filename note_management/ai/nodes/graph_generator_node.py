@@ -7,5 +7,5 @@ from llm.langchain_gemini_client import genai_client
 def graph_generator(state : State):
     
     return {
-        "graph": genai_client.invoke(prompt_template.format(notes=state["summary"]))
+        "graph": genai_client.invoke(prompt_template.format(notes=state["summary"])).content
     }
