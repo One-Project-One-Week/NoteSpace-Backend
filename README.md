@@ -1,24 +1,63 @@
-# NoteSpace — Your AI-Powered Note-Taking Universe
+# 🧠 NoteSpace — Your AI-Powered Note-Taking Universe
 
-NoteSpace is an AI-powered note-taking web app that turns your PDFs into clean, structured notes. It doesn't stop there — you can summarize content, visualize key insights through interactive graphs, and even share or bookmark community-created notes. Designed to supercharge how you study, learn, and organize knowledge.
+NoteSpace is an AI-powered web application that redefines how users take, organize, and share notes. With smart features like automatic note generation from PDFs, intelligent summarization, interactive knowledge graphs, and a chatbot assistant, NoteSpace empowers learners, researchers, and professionals to manage knowledge effortlessly.
+
+Built using **Django**, **React**, **LangChain**, and **LangGraph**, this platform delivers real-time autosaving, rich CRUD functionality, and a social layer where users can explore and bookmark public notes from others. It also provides a rich text editor powered by **Quill.js** to format and style your notes easily.
 
 ## 👥 Team Members
 
-| Name             | Role                        | GitHub                                      |
-|------------------|-----------------------------|---------------------------------------------|
-| Min Sik Hein     | Project Manager / Backend AI Developer | [@Direwen](https://github.com/Direwen)        |
-| Htet Aung Lwin   | Frontend Developer          | [@HtetAungLw1n](https://github.com/HtetAungLw1n) |
-| Oak Soe Thein    | Frontend Developer          | [@tom2811](https://github.com/tom2811)         |
-| Khant Thit Oo    | Backend Developer           | [@travthegoat](https://github.com/travthegoat) |
-| Ei Ei Htwe San   | Backend Developer           | [@Eliza-ke](https://github.com/Eliza-ke)       |
-| Htoo Htoo Zaw    | UI/UX Designer              | [@htoohtoozaw09](https://github.com/htoohtoozaw09) |
+| Name             | Role                               | GitHub                                              |
+|------------------|------------------------------------|-----------------------------------------------------|
+| Min Sik Hein     | Project Manager / Backend AI Developer | [@Direwen](https://github.com/Direwen)             |
+| Htet Aung Lwin   | Frontend Developer                 | [@HtetAungLw1n](https://github.com/HtetAungLw1n)    |
+| Oak Soe Thein    | Frontend Developer                 | [@tom2811](https://github.com/tom2811)              |
+| Khant Thit Oo    | Backend Developer                  | [@travthegoat](https://github.com/travthegoat)      |
+| Ei Ei Htwe San   | Backend Developer                  | [@Eliza-ke](https://github.com/Eliza-ke)            |
+| Htoo Htoo Zaw    | UI/UX Designer                     | [@htoohtoozaw09](https://github.com/htoohtoozaw09)  |
 
-## 🚀 Features
+## 🚀 Key Features
 
-- 📄 **PDF to Notes** — Upload any PDF and let NoteSpace automatically generate structured, readable notes using AI.
-- ✂️ **Smart Summarization** — Get clean summaries of long documents to save time and focus on what matters.
-- 📊 **Graph Visualization** — Visualize the most important concepts and keywords in your notes through interactive graphs.
-- 🧠 **Memory-Packed History** — Keep track of everything you've uploaded, summarized, and explored.
-- 🔖 **Bookmark & Save** — Save your favorite notes from other users to your personal collection.
-- 🌐 **Community Sharing** — Share your notes publicly and explore notes published by others.
+- 📄 **PDF to Notes (Max 2MB)**  
+  Upload your PDF and let our AI convert it into clean, structured notes instantly.
 
+- 📝 **Rich Text Editor**  
+  Write and format your notes with a user-friendly Quill.js editor — add bold, lists, headings, and more.
+
+- ✨ **AI Note Assistant**  
+  A chatbot that understands and interacts with your notes to answer questions, explain concepts, or help you brainstorm.
+
+- ✂️ **Note Summarization**  
+  Generate concise, digestible summaries with bullet-pointed key takeaways.
+
+- 🔗 **Knowledge Graph Generation**  
+  Visualize relationships between entities and concepts across your notes with dynamic, interactive graphs.
+
+- 💾 **Real-Time Autosave + Full CRUD**  
+  Notes are automatically saved every few seconds. Edit, delete, and manage all your notes with full CRUD support.
+
+- 🌐 **Public Sharing**  
+  Choose to publish any of your notes for public viewing. Shared notes include their summaries and knowledge graphs.
+
+- 🔍 **Explore & Bookmark**  
+  Search through public notes shared by others and bookmark your favorite ones for quick access.
+
+## 🛠️ Tech Stack
+
+- **Backend**: Django, LangChain, LangGraph  
+- **Frontend**: React, Quill.js, React Flow  
+
+## 📌 Usage
+
+1. Sign up and Log in.
+2. Upload a PDF (max 2MB) or start a blank note.
+3. Use the Quill.js editor to format your content with headings, lists, and more.
+4. Use the AI assistant to help understand or expand your ideas.
+5. Generate summaries and explore the knowledge graph.
+6. Publish notes to the community or keep them private.
+7. Discover public notes and bookmark the ones you love.
+
+## 🌟 Vision
+
+NoteSpace is built to become your second brain — helping you not just store information, but *understand* and *connect* it. Whether you're a student, researcher, or lifelong learner, we aim to supercharge your thinking with intelligent tools.
+
+---
