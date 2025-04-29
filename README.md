@@ -1,5 +1,7 @@
 # 🧠 NoteSpace — Your AI-Powered Note-Taking Universe
 
+![Alt text](https://github.com/One-Project-One-Week/NoteSpace-Backend/blob/main/thumnails_final.png?raw=true)
+
 NoteSpace is an AI-powered web application that redefines how users take, organize, and share notes. With smart features like automatic note generation from PDFs, intelligent summarization, interactive knowledge graphs, and a chatbot assistant, NoteSpace empowers learners, researchers, and professionals to manage knowledge effortlessly.
 
 Built using **Django**, **React**, **LangChain**, and **LangGraph**, this platform delivers real-time autosaving, rich CRUD functionality, and a social layer where users can explore and bookmark public notes from others. It also provides a rich text editor powered by **Quill.js** to format and style your notes easily.
