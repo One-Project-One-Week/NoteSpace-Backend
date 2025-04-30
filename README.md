@@ -1,6 +1,6 @@
 # 🧠 NoteSpace — Your AI-Powered Note-Taking Universe
 
-![Alt text](https://github.com/One-Project-One-Week/NoteSpace-Backend/blob/main/thumnails_final.png?raw=true)
+![Alt text](https://github.com/One-Project-One-Week/NoteSpace-Backend/blob/main/supersuperfinal.png?raw=true)
 
 NoteSpace is an AI-powered web application that redefines how users take, organize, and share notes. With smart features like automatic note generation from PDFs, intelligent summarization, interactive knowledge graphs, and a chatbot assistant, NoteSpace empowers learners, researchers, and professionals to manage knowledge effortlessly.
 
@@ -13,7 +13,7 @@ Built using **Django**, **React**, **LangChain**, and **LangGraph**, this platfo
 | Min Sik Hein     | Project Manager / Backend AI Developer | [@Direwen](https://github.com/Direwen)             |
 | Htet Aung Lwin   | Frontend Developer                 | [@HtetAungLw1n](https://github.com/HtetAungLw1n)    |
 | Oak Soe Thein    | Frontend Developer                 | [@tom2811](https://github.com/tom2811)              |
-| Khant Thit Oo    | Backend Developer                  | [@travthegoat](https://github.com/travthegoat)      |
+| Khant Thit Oo    | Full Stack Developer                  | [@travthegoat](https://github.com/travthegoat)      |
 | Ei Ei Htwe San   | Backend Developer                  | [@Eliza-ke](https://github.com/Eliza-ke)            |
 | Htoo Htoo Zaw    | UI/UX Designer                     | [@htoohtoozaw09](https://github.com/htoohtoozaw09)  |
 
