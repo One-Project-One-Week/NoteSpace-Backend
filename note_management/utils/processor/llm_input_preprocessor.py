@@ -5,13 +5,16 @@ from nltk.tokenize import sent_tokenize
 
 def ensure_nltk_data():
     try:
-        # Try to use the tokenizer - if it fails, data isn't downloaded
+        # Try to use the tokenizer - if it fails, data isn't available
         sent_tokenize("Test sentence.")
     except LookupError:
-        # If data isn't downloaded, download it
-        nltk.download()
+        # Non-interactive download to a specific directory (handled by Dockerfile)
+        import os
+        os.environ['NLTK_DATA'] = '/root/nltk_data'
+        nltk.data.path.append('/root/nltk_data')
+        nltk.download('punkt', download_dir='/root/nltk_data', quiet=True)
 
-# Ensure NLTK data is available
+# Ensure NLTK data is available (should succeed due to Dockerfile)
 ensure_nltk_data()
 
 def tokenize_and_split_text(content, max_chunk_size=2500) -> list[str]:

@@ -36,7 +36,7 @@ class Summary(models.Model):
         related_name="summary"
     )
     content = models.TextField()
-    graph = models.JSONField(default="")
+    graph = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
