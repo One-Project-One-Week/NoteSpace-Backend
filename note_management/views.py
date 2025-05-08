@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.cache import cache
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action, throttle_classes
 from rest_framework.response import Response
@@ -40,17 +41,80 @@ class NotesViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         if self.action == "list":
-            return Note.objects.filter(user=self.request.user)
+            cache_key = f"notes_ids_{self.request.user.id}"
+            cached_ids = cache.get(cache_key)
+            if cached_ids is not None:
+                print(">>>>> From Cache: NOTE IDS <<<<<")
+                return Note.objects.filter(id__in=cached_ids)
+            
+            queryset = Note.objects.filter(user=self.request.user)
+            cached_ids = [note.id for note in queryset]
+            cache.set(cache_key, cached_ids, timeout=(60 * 5))
+            print(">>>>>> CACHED: NOTE IDS <<<<<<<")
+            return queryset
+        
+        if self.action == "public":
+            cache_key = "public_notes_ids"
+            cached_ids = cache.get(cache_key)
+            
+            if cached_ids is not None:
+                print(">>>>>> FROM CACHE: PUBLIC NOTES IDS <<<<<<<")
+                return Note.objects.filter(id__in=cached_ids)
+            
+            queryset = Note.objects.filter(is_public=True)
+            cached_ids = [note.id for note in queryset]
+            cache.set(cache_key, cached_ids, timeout=(60 * 30))
+            print(">>>>>> CACHED: PUBLIC NOTES IDS <<<<<<<")
+            return queryset
         
         return Note.objects.all()
     
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        note = serializer.save(user=self.request.user)
+        cache.delete(f'notes_ids_{self.request.user.id}')
+        cache.delete(f'test_notes_{self.request.user.id}')
+        if note.is_public:
+            cache.delete('public_notes_ids')
+
+    def perform_update(self, serializer):
+        note = serializer.save()
+        cache.delete(f'notes_ids_{self.request.user.id}')
+        cache.delete(f'test_notes_{self.request.user.id}')
+        if note.is_public:
+            cache.delete('public_notes_ids')
+
+    def perform_destroy(self, instance):
+        is_public = instance.is_public
+        instance.delete()
+        cache.delete(f'notes_ids_{self.request.user.id}')
+        cache.delete(f'test_notes_{self.request.user.id}')
+        if is_public:
+            cache.delete('public_notes_ids')
         
+    @action(detail=False, methods=['GET'], url_path='test')
+    def test(self, request):
+        #Create unique cache key
+        cache_key = f"test_notes_{request.user.id}"
+        
+        #Check if it's cached
+        cache_response = cache.get(cache_key)
+        if cache_response is not None:
+            print(">>>>>> FROM CACHE <<<<<<<")
+            return Response(cache_response)
+        
+        import time
+        time.sleep(2)
+        notes=Note.objects.filter(user=request.user).count()
+        response = {'message': f"You have {notes} notes at {time.time()}"}
+        
+        cache.set(cache_key, response, timeout=30)
+        print(">>>>>> CACHED <<<<<<<")
+        return Response(response)
+    
     @action(detail=False, methods=['GET'])
     def public(self, request):
-        notes = Note.objects.filter(is_public=True)
-        filtered_notes = self.filter_queryset(notes)
+        queyrset = self.get_queryset()
+        filtered_notes = self.filter_queryset(queyrset)
         serializer = NoteSerializer(filtered_notes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -63,13 +127,14 @@ class NotesViewSet(viewsets.ModelViewSet):
         
         if Bookmark.objects.filter(user=request.user, note=note).exists():
             Bookmark.objects.get(user=request.user, note=note).delete()
-            return Response({ "code": "deleted" })
+            cache.delete(f'bookmarks_ids_{request.user.id}')  # Invalidate cache
+            print(">>>>>> CLEARED: BOOKMARKS IDS CACHE <<<<<<<")
+            return Response({"code": "deleted"})
         
-        Bookmark.objects.create(
-            user=request.user,
-            note=note
-        )
-        return Response({ "code": "added" })   
+        Bookmark.objects.create(user=request.user, note=note)
+        cache.delete(f'bookmarks_ids_{request.user.id}')  # Invalidate cache
+        print(">>>>>> CLEARED: BOOKMARKS IDS CACHE <<<<<<<")
+        return Response({"code": "added"})
     
     @action(detail=True, methods=['GET'], url_path='summary')
     def summarise(self, request, pk=None):
@@ -196,6 +261,21 @@ class BookmarkViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         if self.action == "list":
-            return Bookmark.objects.filter(user=self.request.user)
+            cache_key = f"bookmarks_ids_{self.request.user.id}"
+            cached_ids = cache.get(cache_key)
+            if cached_ids is not None:
+                print(">>>>>> FROM CACHE: BOOKMARKS IDS")
+                return Bookmark.objects.filter(id__in=cached_ids)
+            
+            queryset = Bookmark.objects.filter(user=self.request.user)
+            cached_ids = [bookmark.id for bookmark in queryset]
+            cache.set(cache_key, cached_ids, timeout=(60 * 5))
+            print(">>>>>> CACHED: BOOKMARKS IDS <<<<<")
+            return queryset
         
         return Bookmark.objects.all()
+        
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        cache.delete(f'bookmarks_ids_{self.request.user.id}')
+        
