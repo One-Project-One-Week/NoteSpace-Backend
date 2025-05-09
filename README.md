@@ -1,6 +1,6 @@
 # 🧠 NoteSpace — Your AI-Powered Note-Taking Universe
 
-![Alt text](https://github.com/One-Project-One-Week/NoteSpace-Backend/blob/main/supersuperfinal.png?raw=true)
+![Alt text](https://github.com/One-Project-One-Week/NoteSpace-Backend/blob/main/supersupersuperfinal.png?raw=true)
 
 NoteSpace is an AI-powered web application that redefines how users take, organize, and share notes. With smart features like automatic note generation from PDFs, intelligent summarization, interactive knowledge graphs, and a chatbot assistant, NoteSpace empowers learners, researchers, and professionals to manage knowledge effortlessly.
 
